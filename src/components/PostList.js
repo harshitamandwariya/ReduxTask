@@ -36,13 +36,13 @@ constructor(props){
     history.push('/');
  }
 
+
   renderAdmin(post) {
       localStorage.getItem("data")
-    //  console.log(localStorage.getItem("user_display_name"));
-      
-      
+     
          if(localStorage.getItem("user_id") === post.author.toString()){
-            return(
+            
+            return(       
                  <div className="right floated content">
                     <Link to={`/EditPost/${post.id}`}  className="ui button primary">Edit</Link>
                     <Link to={`/DeletePost/${post.id}`} className="ui button negative">Delete</Link>
@@ -56,11 +56,11 @@ constructor(props){
         return (
             <div className='item' key={post.id}>
                 {this.renderAdmin(post)}
-                <i className="large middle aligned icon camera" />
-                <div className = 'content'>
-                    <Link to={`/${post.id}`} className="header">{post.title.rendered} </Link>
-                    <div className="description">{renderHTML(post.excerpt.rendered)}</div>
-                </div>              
+                 <i className="large middle aligned icon camera" />
+                 <div className = 'content'>
+                    <Link to={`/PostView/${post.id}`} className="header">{post.title.rendered} </Link>
+                    <div className="description">{renderHTML(post.content.rendered)}</div>
+                 </div>              
             </div>
         );
     });
@@ -68,25 +68,24 @@ constructor(props){
 
 
 
-    render() {
-        if(localStorage.getItem("token")){
-            return (
-                <div> 
-                    <h2>Posts</h2>
+ render() {
+      if(localStorage.getItem("token")){
+         return (
+             <div> 
+                <h2>Posts</h2>
                     <div className="ui secondary pointing menu">
                         <Link to='/CreatePost' className="ui button primary"> Create new Post</Link>
                         <Link to='/' className="ui button negative"onClick={this.onSubmit}>Logout</Link>
                     </div>
                     <div className='ui celled list'>{this.renderList()}</div>
-                </div>
-                );
-        }else {
-                return(
-                         <div>{history.push('/')}</div>
-                      )
-        }
-            
-    }
+             </div>
+          );
+        }  else {
+              return(
+                  <div>{history.push('/')}</div>
+                )
+         }
+     }
 }
 
 export default connect (null ,{postList})(PostList);

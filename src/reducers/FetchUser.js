@@ -1,4 +1,4 @@
-
+import _ from 'lodash';
 
 const FetchUser = (state=[] ,action) => {
     switch(action.type){
@@ -7,13 +7,15 @@ const FetchUser = (state=[] ,action) => {
       case "LOGIN_USER":
       return action.payload ;    
        case "POST_LIST" :
-       return action.payload ;   
+       return{ ...state, ..._.mapKeys(action.payload, 'id') }; ;   
        case "CREATE_POST" :
        return action.payload ;   
        case "EDIT_POST" :
        return action.payload ;   
        case "DELETE_POST" :
-       return action.payload ;   
+       return action.payload ;
+       case "SINGLE_POST" :
+       return action.payload ;      
        default:
       return state;
     }

@@ -4,7 +4,7 @@ import {loginUser} from '../actions/index';
 import { connect } from "react-redux";
 import {Link} from 'react-router-dom';
 import {toastr} from 'react-redux-toastr'
-
+import history from './history';
 
 class LoginForm extends React.Component {
    
@@ -13,9 +13,8 @@ class LoginForm extends React.Component {
           if(res.status === 200){
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("user_id", res.data.user_id);
-          localStorage.setItem("user_display_name", res.data.user_display_name);
           this.props.history.push('/PostList')  
-          toastr.success('you can see all post')
+        //   toastr.success('you can see all post')
           }
       });
  }
@@ -36,23 +35,23 @@ class LoginForm extends React.Component {
 
     
     render(){    
-    
+        if(!localStorage.getItem("token")) {
         return(
-          <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
+          <form className='ui form' onSubmit={this.props.handleSubmit(this.onSubmit)}>
                      <h2> LoginForm </h2>
                 <div>
-                    <label>username</label>
+                    <label>Username</label>
                     <div>
                     <Field
                         name="username"
                         component={this.renderField}
-                        type="username"
+                        type="text"
                         placeholder="Username"
                     />
                     </div>
                 </div>
                 <div>
-                    <label>password</label>
+                    <label>Password</label>
                     <div>
                     <Field
                         name="password"
@@ -64,11 +63,16 @@ class LoginForm extends React.Component {
                 </div>
                 <div>
                     <button type="submit"  className="ui button primary">Login</button>
-                     <Link to="/SignUp"> Don't have an account?</Link>
+                     <Link to="/SignUp"> <button className="ui button ">Don't have an account?</button></Link>
                </div>
           </form>
         );
+    }else{
+        return(
+            <div>{history.push('/PostList')}</div>
+        )
     }
+}
 }
 
 const  validate = (formValue) => {

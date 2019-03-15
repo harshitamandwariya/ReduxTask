@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { createPost } from '../actions';
 import {Field,reduxForm} from 'redux-form';
 import history from './history';
-import {Link} from 'react-router-dom';
 
 
 
@@ -41,8 +40,21 @@ class CreatePost extends React.Component  {
         )
         }
 
+        renderTextAreaField = (field) => {
+            const { input} = field;
+            return (
+                <div>
+                    <label>{field.label}</label>
+                    <div>
+                    <textarea value={field.value} {...input} placeholder={field.placeholder ? field.placeholder : ''}></textarea>
+                    </div>
+                </div>
+            );
+        }
+
     render(){
         let onSubmitHelper=this.onSubmit;
+
        if(this.props.onSubmit){
             onSubmitHelper=this.props.onSubmit
        }
@@ -50,10 +62,9 @@ class CreatePost extends React.Component  {
        if(localStorage.getItem('token')){
         return (
           
-            <form onSubmit= {this.props.handleSubmit(onSubmitHelper)}>
-                  <h3>Create Post</h3>
+            <form className='ui form' onSubmit= {this.props.handleSubmit(onSubmitHelper)}>
                   <div>
-                      <label>title</label>
+                      <label>Title</label>
                       <div>
                       <Field
                           name="title"
@@ -64,18 +75,17 @@ class CreatePost extends React.Component  {
                       </div>
                   </div>
                   <div>
-                      <label>description</label>
+                      <label>Description</label>
                       <div>
                       <Field
                           name="content"
-                          component={this.renderField}
-                          type="text"
+                          component={this.renderTextAreaField}
                           placeholder="description"                    
                       />
                       </div>
                   </div>
                   <div>
-                      <label>status</label>
+                      <label>Select Status</label>
                       <div>
                       <Field
                           name="status"
@@ -92,9 +102,7 @@ class CreatePost extends React.Component  {
                       </div>
                   </div>
                   <div>
-                      <button type='submit'  className="ui button primary">Submit</button>
-                       <Link to='/'><button  className="ui button primary" onClick={this.onSubmitLogout}>Logout</button></Link>
-                     
+                      <button type='submit'  className="ui button primary">Submit</button>                  
                   </div>
             </form>      
         );
@@ -115,19 +123,18 @@ class CreatePost extends React.Component  {
 
     if(!formValue.content){
         errors.content='you must enter a description';
-    }else if(formValue.content.length > 200){
-        errors.content="you must enter less than 200 letters"
-    }
-
-    if(!formValue.status){
+    }else if(formValue.content.length > 500){
+        errors.content="you must enter less than 500 letters"
+    }    if(!formValue.status){
         errors.status='select any one choice';
     }
     return errors;
   }
   
-
 export default connect(null , {createPost})((reduxForm({
     form : 'CreatePost',
-    validate
+    validate,
+    enableReinitialize: true,
+
 
 }))(CreatePost));
